@@ -27,6 +27,6 @@ public class AddressFieldExtractor implements FieldExtractor<Address> {
 
         if (dataNode == null) return;
 
-        addressDataFieldExtractor.extract(instance, node);
+        addressDataFieldExtractor.extract(instance, dataNode);
     }
 }

@@ -118,11 +118,14 @@ public class AddressDataFieldExtractor implements FieldExtractor<Address> {
         addressFlatData.setFlatArea(JsonHelper.safeGet(node, "flat_area", JsonNode::textValue));
         addressFlatData.setFlatPrice(JsonHelper.safeGet(node, "flat_price", JsonNode::textValue));
 
-        final List<AddressMetro> metroList = JsonHelper.nodeToList(node.get("metro"), jsonNode -> {
+        final List<AddressMetro> metroList = JsonHelper.nodeToList(node.get("metro"), metroNode -> {
             final AddressMetro addressMetro = new AddressMetro();
-            addressMetro.setName(jsonNode.get("name").textValue());
-            addressMetro.setLine(jsonNode.get("line").textValue());
-            addressMetro.setDistance(jsonNode.get("distance").textValue());
+            addressMetro.setName(JsonHelper.safeGet(metroNode, "name", JsonNode::textValue));
+            addressMetro.setLine(JsonHelper.safeGet(metroNode, "line", JsonNode::textValue));
+            final Double distance = JsonHelper.safeGet(metroNode, "distance", JsonNode::doubleValue);
+            if (distance != null) {
+                addressMetro.setDistance(String.valueOf(distance));
+            }
             return addressMetro;
         });
         instance.setMetroList(metroList);

@@ -1,7 +1,5 @@
 package com.rbkmoney.questionary.aggr.proxy.service;
 
-import com.rbkmoney.damsel.questionary_proxy_aggr.DaDataRequestException;
-import com.rbkmoney.damsel.questionary_proxy_aggr.KonturFocusRequestException;
 import com.rbkmoney.questionary_proxy_aggr.dadata_api.DaDataEndpoint;
 import com.rbkmoney.questionary_proxy_aggr.dadata_api.DaDataRequest;
 import com.rbkmoney.questionary_proxy_aggr.dadata_api.DaDataResponse;

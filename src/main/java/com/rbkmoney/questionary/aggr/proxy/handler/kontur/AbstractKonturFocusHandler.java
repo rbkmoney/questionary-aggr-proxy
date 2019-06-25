@@ -57,7 +57,8 @@ public abstract class AbstractKonturFocusHandler implements KonturFocusRequestHa
         try {
             return handleRequest(request);
         } catch (Exception e) {
-            throw new KonturFocusHandlerException(e.getMessage());
+            log.error("Exception while handling request", e);
+            throw new KonturFocusHandlerException("Unexpected exception", e);
         }
     }
 

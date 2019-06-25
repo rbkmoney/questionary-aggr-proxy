@@ -35,41 +35,44 @@ public class KonturFocusApi {
         this.konturFocusSettings = konturFocusSettings;
     }
 
-    public ResponseEntity<String> reqRequest(List<String> orgnList, List<String> innList) throws KonturFocusRequestException {
-        final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(REQ_URL);
-        uriComponentsBuilder.queryParam("ogrn", String.join(",", orgnList));
-        uriComponentsBuilder.queryParam("inn", String.join(",", innList));
-
-        return sendRequest(uriComponentsBuilder, String.class);
+    public ResponseEntity<String> reqRequest(List<String> ogrnList, List<String> innList) throws KonturFocusRequestException {
+        final URI uri = buildUri(REQ_URL, ogrnList, innList);
+        return sendRequest(uri, String.class);
     }
 
-    public ResponseEntity<String> licenseRequest(List<String> orgnList, List<String> innList) throws KonturFocusRequestException {
-        final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(LICENCES);
-        uriComponentsBuilder.queryParam("ogrn", String.join(",", orgnList));
-        uriComponentsBuilder.queryParam("inn", String.join(",", innList));
-
-        return sendRequest(uriComponentsBuilder, String.class);
+    public ResponseEntity<String> licenseRequest(List<String> ogrnList, List<String> innList) throws KonturFocusRequestException {
+        final URI uri = buildUri(LICENCES, ogrnList, innList);
+        return sendRequest(uri, String.class);
     }
 
-    public ResponseEntity<String> egrDetailsRequest(List<String> orgnList, List<String> innList) throws KonturFocusRequestException {
-        final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(EGR_DETAILS);
-        uriComponentsBuilder.queryParam("ogrn", String.join(",", orgnList));
-        uriComponentsBuilder.queryParam("inn", String.join(",", innList));
-
-        return sendRequest(uriComponentsBuilder, String.class);
+    public ResponseEntity<String> egrDetailsRequest(List<String> ogrnList, List<String> innList) throws KonturFocusRequestException {
+        final URI uri = buildUri(EGR_DETAILS, ogrnList, innList);
+        return sendRequest(uri, String.class);
     }
 
-    private <T> ResponseEntity<T> sendRequest(UriComponentsBuilder uriComponentsBuilder, Class<T> responseType) throws KonturFocusRequestException {
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+    private URI buildUri(String url, List<String> ogrnList, List<String> innList) {
         final Map<String, String> uriParams = new HashMap<>();
         uriParams.put("token", konturFocusSettings.getToken());
-        final URI uri = uriComponentsBuilder.buildAndExpand(uriParams).toUri();
+        final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(url);
+        if (ogrnList != null && !ogrnList.isEmpty()) {
+            uriComponentsBuilder.queryParam("ogrn", String.join(",", ogrnList));
+        }
+        if (innList != null && !innList.isEmpty()) {
+            uriComponentsBuilder.queryParam("inn", String.join(",", innList));
+        }
+
+        return uriComponentsBuilder.buildAndExpand(uriParams).toUri();
+    }
+
+    private <T> ResponseEntity<T> sendRequest(URI uri, Class<T> responseType) throws KonturFocusRequestException {
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
         final HttpEntity<?> entity = new HttpEntity<>(headers);
         try {
-            log.info("KonturFocus request: {}", uri.toString());
+            log.info("Send KonturFocus request to: {}", uri.toString());
             return restTemplate.exchange(uri, HttpMethod.GET, entity, responseType);
         } catch (Exception e) {
+            log.error("Request exception", e);
             throw new KonturFocusRequestException(e.getMessage());
         }
     }

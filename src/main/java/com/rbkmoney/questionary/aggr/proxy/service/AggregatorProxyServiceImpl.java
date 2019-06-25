@@ -64,14 +64,9 @@ public class AggregatorProxyServiceImpl implements AggregatorProxyService {
         log.info("Execute DaData request '{}'", endpoint);
         final DaDataRequestHandler daDataRequestHandler = daDataRequestHandlerMap.get(endpoint);
         if (daDataRequestHandler == null) {
-            throw new DaDataRequestException("Unknown endpoint: " + endpoint);
+            throw new TException("Unknown endpoint: " + endpoint);
         }
-        try {
-            return daDataRequestHandler.handle(request);
-        } catch (Exception e) {
-            log.error("Exception while handling request", e);
-            throw new TException(e);
-        }
+        return daDataRequestHandler.handle(request);
     }
 
     @Override
@@ -80,14 +75,9 @@ public class AggregatorProxyServiceImpl implements AggregatorProxyService {
         log.info("Execute KonturFocus request '{}'", endPoint);
         final KonturFocusRequestHandler konturFocusRequestHandler = konturFocusRequestHandlerMap.get(endPoint);
         if (konturFocusRequestHandler == null) {
-            throw new KonturFocusRequestException("Unknown endpoint: " + endPoint);
+            throw new TException("Unknown endpoint: " + endPoint);
         }
-        try {
-            return konturFocusRequestHandler.handle(request);
-        } catch (Exception e) {
-            log.error("Exception while handling request", e);
-            throw new TException(e);
-        }
+        return konturFocusRequestHandler.handle(request);
     }
 
 }

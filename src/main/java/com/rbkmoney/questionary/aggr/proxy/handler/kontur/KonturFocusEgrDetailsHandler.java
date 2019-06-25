@@ -24,10 +24,10 @@ public class KonturFocusEgrDetailsHandler extends AbstractKonturFocusHandler {
         final EgrDetailsQuery egrDetailsQuery = request.getEgrDetailsQuery();
         log.debug("EgrDetailsQuery: {}", egrDetailsQuery);
         final ResponseEntity<String> responseEntity = konturFocusApi.egrDetailsRequest(egrDetailsQuery.getOgrn(), egrDetailsQuery.getInn());
-        final List<EgrDetailsResponse> egrDetailsReponseList = getObjectMapper().readValue(responseEntity.getBody(),
+        final List<EgrDetailsResponse> egrDetailsResponseList = getObjectMapper().readValue(responseEntity.getBody(),
                 new TypeReference<List<EgrDetailsResponse>>() {
                 });
 
-        return KonturFocusResponse.egr_details_response(egrDetailsReponseList);
+        return KonturFocusResponse.egr_details_response(egrDetailsResponseList);
     }
 }

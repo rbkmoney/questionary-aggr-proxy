@@ -87,6 +87,9 @@ public class DaDataDeserializationTest {
         Assert.assertEquals("1027700132195", partyContent.getOgrn());
         Assert.assertEquals("64.19", partyContent.getOkved());
         Assert.assertEquals("2002-08-16T04:00", partyContent.getOgrnDate());
+        Assert.assertNotNull("г Москва, ул Вавилова, д 19", partyContent.getAddress().getValue());
+        Assert.assertNotNull("г Москва, Академический р-н, ул Вавилова, д 19", partyContent.getAddress().getUnrestrictedValue());
+        Assert.assertNotNull("0.8", partyContent.getAddress().getMetroList().get(0).getDistance());
     }
 
     @Test

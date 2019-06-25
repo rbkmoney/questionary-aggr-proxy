@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.rbkmoney.questionary.aggr.proxy.serialize.dadata.*;
 import com.rbkmoney.questionary.aggr.proxy.service.api.DaDataApi;
-import com.rbkmoney.questionary.aggr.proxy.service.api.model.DaDataQuery;
 import com.rbkmoney.questionary_proxy_aggr.base_dadata.*;
 import com.rbkmoney.questionary_proxy_aggr.dadata_address.Address;
 import com.rbkmoney.questionary_proxy_aggr.dadata_api.DaDataRequest;
@@ -16,7 +15,6 @@ import com.rbkmoney.questionary_proxy_aggr.dadata_fms_unit.FmsUnitContent;
 import com.rbkmoney.questionary_proxy_aggr.dadata_okved2.OkvedContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 
 public abstract class AbstractDaDataHandler implements DaDataRequestHandler {
 
@@ -64,7 +62,8 @@ public abstract class AbstractDaDataHandler implements DaDataRequestHandler {
         try {
             return handleRequest(request);
         } catch (Exception e) {
-            throw new DaDataHandlerException("Exception while handling request", e);
+            log.error("Exception while handling request", e);
+            throw new DaDataHandlerException("Unexpected exception", e);
         }
     }
 

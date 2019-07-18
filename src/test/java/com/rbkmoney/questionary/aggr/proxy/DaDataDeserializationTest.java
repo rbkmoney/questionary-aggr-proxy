@@ -154,11 +154,9 @@ public class DaDataDeserializationTest {
         final OkvedContent okvedContent = okvedResponseWrapper.getOkvedContentWrapperList().get(0).getOkvedContent();
         Assert.assertEquals("Добыча абразивных материалов, асбеста, кремнеземистой каменной муки, природных графитов," +
                 " мыльного камня (талька), полевого шпата и т. д.", okvedContent.getValue());
-        Assert.assertEquals("Добыча абразивных материалов, асбеста, кремнеземистой каменной муки, природных графитов," +
-                " мыльного камня (талька), полевого шпата и т. д.", okvedContent.getUnrestrictedValue());
         Assert.assertEquals("B.08.99.2", okvedContent.getIdx());
-        Assert.assertEquals("B", okvedContent.getRazdel());
-        Assert.assertEquals("08.99.2", okvedContent.getKod());
+        Assert.assertEquals("B", okvedContent.getSection());
+        Assert.assertEquals("08.99.2", okvedContent.getCode());
         Assert.assertEquals("Добыча абразивных материалов, асбеста, кремнеземистой каменной муки, природных графитов," +
                 " мыльного камня (талька), полевого шпата и т. д.", okvedContent.getName());
 

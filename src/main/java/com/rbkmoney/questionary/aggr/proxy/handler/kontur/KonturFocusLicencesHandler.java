@@ -6,6 +6,7 @@ import com.rbkmoney.questionary_proxy_aggr.kontur_focus_api.KonturFocusRequest;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_api.KonturFocusResponse;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_licences.LicencesQuery;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_licences.LicencesResponse;
+import com.rbkmoney.questionary_proxy_aggr.kontur_focus_licences.LicencesResponses;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -28,6 +29,6 @@ public class KonturFocusLicencesHandler extends AbstractKonturFocusHandler {
                 new TypeReference<List<LicencesResponse>>() {
                 });
 
-        return KonturFocusResponse.licences_response(licencesResponseList);
+        return KonturFocusResponse.licences_responses(new LicencesResponses(licencesResponseList));
     }
 }

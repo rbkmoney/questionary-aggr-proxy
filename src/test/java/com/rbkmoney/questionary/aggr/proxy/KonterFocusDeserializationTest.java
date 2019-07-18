@@ -8,7 +8,6 @@ import com.rbkmoney.questionary.aggr.proxy.serialize.kontur.*;
 import com.rbkmoney.questionary_proxy_aggr.base_kontur_focus.Branch;
 import com.rbkmoney.questionary_proxy_aggr.base_kontur_focus.LegalAddress;
 import com.rbkmoney.questionary_proxy_aggr.base_kontur_focus.LegalName;
-import com.rbkmoney.questionary_proxy_aggr.base_kontur_focus.Toponim;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_egr_details.EgrDetailsIndividualEntity;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_egr_details.EgrDetailsResponse;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_egr_details.EgrRecord;
@@ -16,8 +15,8 @@ import com.rbkmoney.questionary_proxy_aggr.kontur_focus_licences.LicencesRespons
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_licences.License;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_req.LegalEntityStatusDetail;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_req.PrivateEntityStatusDetail;
-import com.rbkmoney.questionary_proxy_aggr.kontur_focus_req.RegIndividualEntity;
-import com.rbkmoney.questionary_proxy_aggr.kontur_focus_req.RegResponse;
+import com.rbkmoney.questionary_proxy_aggr.kontur_focus_req.ReqIndividualEntity;
+import com.rbkmoney.questionary_proxy_aggr.kontur_focus_req.ReqResponse;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,18 +61,18 @@ public class KonterFocusDeserializationTest {
         simpleModule.addDeserializer(LegalAddress.class, new KonturLegalAddressDeserializer());
         simpleModule.addDeserializer(LegalName.class, new KonturLegalNameDeserializer());
         simpleModule.addDeserializer(PrivateEntityStatusDetail.class, new KonturIPStatusDeserializer());
-        simpleModule.addDeserializer(RegResponse.class, new KonturRegResponseDeserializer());
-        simpleModule.addDeserializer(RegIndividualEntity.class, new KonturRegIPDeserializer());
+        simpleModule.addDeserializer(ReqResponse.class, new KonturReqResponseDeserializer());
+        simpleModule.addDeserializer(ReqIndividualEntity.class, new KonturReqIPDeserializer());
         objectMapper.registerModule(simpleModule);
-        final List<RegResponse> regResponseList = objectMapper.readValue(TestResponse.kfReqResp(),
-                new TypeReference<List<RegResponse>>() {
+        final List<ReqResponse> regResponseList = objectMapper.readValue(TestResponse.kfReqResp(),
+                new TypeReference<List<ReqResponse>>() {
                 });
         Assert.assertEquals(2, regResponseList.size());
-        final RegResponse ipRegResponse = regResponseList.get(0);
+        final ReqResponse ipRegResponse = regResponseList.get(0);
         Assert.assertEquals("561100409545", ipRegResponse.getInn());
         Assert.assertEquals("309565808600188", ipRegResponse.getOgrn());
         Assert.assertEquals("https://focus.kontur.ru/entity?query=309565808600188", ipRegResponse.getFocusHref());
-        final RegIndividualEntity individualEntity = ipRegResponse.getPrivateEntity().getIndividualEntity();
+        final ReqIndividualEntity individualEntity = ipRegResponse.getPrivateEntity().getIndividualEntity();
         Assert.assertEquals("Иванов Иван Иванович", individualEntity.getFio());
         Assert.assertEquals("0164667059", individualEntity.getOkpo());
         Assert.assertEquals("53401364000", individualEntity.getOkato());

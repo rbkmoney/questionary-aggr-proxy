@@ -13,8 +13,8 @@ import com.rbkmoney.questionary_proxy_aggr.kontur_focus_api.KonturFocusResponse;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_egr_details.EgrDetailsResponse;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_req.LegalEntityStatusDetail;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_req.PrivateEntityStatusDetail;
-import com.rbkmoney.questionary_proxy_aggr.kontur_focus_req.RegIndividualEntity;
-import com.rbkmoney.questionary_proxy_aggr.kontur_focus_req.RegResponse;
+import com.rbkmoney.questionary_proxy_aggr.kontur_focus_req.ReqIndividualEntity;
+import com.rbkmoney.questionary_proxy_aggr.kontur_focus_req.ReqResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,8 +30,8 @@ public abstract class AbstractKonturFocusHandler implements KonturFocusRequestHa
         simpleModule.addDeserializer(LegalAddress.class, new KonturLegalAddressDeserializer());
         simpleModule.addDeserializer(LegalName.class, new KonturLegalNameDeserializer());
         simpleModule.addDeserializer(PrivateEntityStatusDetail.class, new KonturIPStatusDeserializer());
-        simpleModule.addDeserializer(RegResponse.class, new KonturRegResponseDeserializer());
-        simpleModule.addDeserializer(RegIndividualEntity.class, new KonturRegIPDeserializer());
+        simpleModule.addDeserializer(ReqResponse.class, new KonturReqResponseDeserializer());
+        simpleModule.addDeserializer(ReqIndividualEntity.class, new KonturReqIPDeserializer());
 
         // EgrDetails deserializer
         simpleModule.addDeserializer(EgrDetailsResponse.class, new KonturEgrDetailsResponseDeserializer());

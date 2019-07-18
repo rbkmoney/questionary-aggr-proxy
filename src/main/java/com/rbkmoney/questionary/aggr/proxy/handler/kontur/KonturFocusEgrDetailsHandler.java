@@ -6,6 +6,7 @@ import com.rbkmoney.questionary_proxy_aggr.kontur_focus_api.KonturFocusRequest;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_api.KonturFocusResponse;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_egr_details.EgrDetailsQuery;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_egr_details.EgrDetailsResponse;
+import com.rbkmoney.questionary_proxy_aggr.kontur_focus_egr_details.EgrDetailsResponses;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -28,6 +29,6 @@ public class KonturFocusEgrDetailsHandler extends AbstractKonturFocusHandler {
                 new TypeReference<List<EgrDetailsResponse>>() {
                 });
 
-        return KonturFocusResponse.egr_details_response(egrDetailsResponseList);
+        return KonturFocusResponse.egr_details_responses(new EgrDetailsResponses(egrDetailsResponseList));
     }
 }

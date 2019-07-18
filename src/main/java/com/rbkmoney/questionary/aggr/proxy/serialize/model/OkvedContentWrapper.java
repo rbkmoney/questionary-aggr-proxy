@@ -8,15 +8,11 @@ public class OkvedContentWrapper {
     @JsonProperty
     private String value;
 
-    @JsonProperty(value = "unrestricted_value")
-    private String unrestrictedValue;
-
     @JsonProperty(value = "data")
     private OkvedContent okvedContent;
 
     public OkvedContent getOkvedContent() {
         okvedContent.setValue(value);
-        okvedContent.setUnrestrictedValue(unrestrictedValue);
         return okvedContent;
     }
 }

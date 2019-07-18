@@ -43,7 +43,7 @@ public class DaDataOkvedHandler extends AbstractDaDataHandler {
         } else if (okvedQuery.getQueryType() == QueryType.BY_INDENTIFIRE) {
             responseEntity = daDataApi.okvedByIdRequest(daDataQuery);
         } else {
-            throw new DaDataRequestException("Unknown request type: {}" + okvedQuery.getQueryType());
+            throw new DaDataRequestException("Unknown request type: " + okvedQuery.getQueryType());
         }
 
         final OkvedResponseWrapper okvedResponseWrapper = getObjectMapper().readValue(responseEntity.getBody(), OkvedResponseWrapper.class);

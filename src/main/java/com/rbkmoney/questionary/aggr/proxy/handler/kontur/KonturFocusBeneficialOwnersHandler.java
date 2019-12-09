@@ -31,7 +31,6 @@ public class KonturFocusBeneficialOwnersHandler extends AbstractKonturFocusHandl
                 });
 
         return KonturFocusResponse.beneficial_owner_responses(new BeneficialOwnerResponses(beneficialOwnerResponseList));
-
     }
 
 }

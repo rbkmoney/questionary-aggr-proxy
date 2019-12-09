@@ -1,8 +1,8 @@
 package com.rbkmoney.questionary.aggr.proxy.service.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbkmoney.damsel.questionary_proxy_aggr.KonturFocusRequestException;
 import com.rbkmoney.questionary.aggr.proxy.config.settings.KonturFocusSettings;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -16,6 +16,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class KonturFocusApi {
 
     private static final String REQ_URL = "https://focus-api.kontur.ru/api3/req?key={token}";
@@ -29,13 +30,6 @@ public class KonturFocusApi {
     private final RestTemplate restTemplate;
 
     private final KonturFocusSettings konturFocusSettings;
-
-    public KonturFocusApi(RestTemplate restTemplate,
-                          KonturFocusSettings konturFocusSettings,
-                          ObjectMapper objectMapper) {
-        this.restTemplate = restTemplate;
-        this.konturFocusSettings = konturFocusSettings;
-    }
 
     public ResponseEntity<String> reqRequest(List<String> ogrnList, List<String> innList) throws KonturFocusRequestException {
         final URI uri = buildUri(REQ_URL, ogrnList, innList);
@@ -52,8 +46,8 @@ public class KonturFocusApi {
         return sendRequest(uri, String.class);
     }
 
-    public ResponseEntity<String> beneficialOwnerRequest(List<String> ogrnLIst, List<String> innList) throws KonturFocusRequestException {
-        final URI uri = buildUri(BENEFICIAL_OWNERS, ogrnLIst, innList);
+    public ResponseEntity<String> beneficialOwnerRequest(List<String> ogrnList, List<String> innList) throws KonturFocusRequestException {
+        final URI uri = buildUri(BENEFICIAL_OWNERS, ogrnList, innList);
         return sendRequest(uri, String.class);
     }
 

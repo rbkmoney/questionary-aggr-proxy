@@ -21,7 +21,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
-public class KonterFocusDeserializationTest {
+public class KonturFocusDeserializationTest {
 
     private ObjectMapper objectMapper;
 
@@ -146,9 +146,6 @@ public class KonterFocusDeserializationTest {
         simpleModule.addDeserializer(ShareHolders.class, new KonturShareHoldersDeserializer());
         simpleModule.addDeserializer(EgrDetailsLegalEntity.class, new KonturEgrDetailsLegalEntityDeserializer());
         simpleModule.addDeserializer(EgrDetailsHistory.class, new KonturEgrDetailsHistoryDeserializer());
-        simpleModule.addDeserializer(BeneficialOwnerUl.class, new KonturBeneficialOwnerUlDeserializer());
-        simpleModule.addDeserializer(BeneficialOwnerForeign.class, new KonturBeneficialOwnerForeignDeserializer());
-        simpleModule.addDeserializer(BeneficialOwnerOther.class, new KonturBeneficialOwnerOtherDeserializer());
         objectMapper.registerModule(simpleModule);
         final List<EgrDetailsResponse> egrDetailsReponseList = objectMapper.readValue(TestResponse.kfEgrDetailsLegal(),
                 new TypeReference<List<EgrDetailsResponse>>() {
@@ -216,9 +213,6 @@ public class KonterFocusDeserializationTest {
     public void kfBeneficialOwnersDeserializerTest() throws IOException {
         final SimpleModule simpleModule = new SimpleModule();
         simpleModule.addDeserializer(BeneficialOwners.class, new KonturBeneficialOwnersDeserializer());
-        simpleModule.addDeserializer(BeneficialOwnerUl.class, new KonturBeneficialOwnerUlDeserializer());
-        simpleModule.addDeserializer(BeneficialOwnerForeign.class, new KonturBeneficialOwnerForeignDeserializer());
-        simpleModule.addDeserializer(BeneficialOwnerOther.class, new KonturBeneficialOwnerOtherDeserializer());
         objectMapper.registerModule(simpleModule);
         final List<BeneficialOwnerResponse> beneficialOwnerResponseList = objectMapper.readValue(TestResponse.kfBeneficialOwnerResp(),
                 new TypeReference<List<BeneficialOwnerResponse>>() {
@@ -236,19 +230,19 @@ public class KonterFocusDeserializationTest {
         BeneficialOwnerUl beneficialOwnerUl = beneficialOwnerResponse.getBeneficialOwners().getBeneficialOwnersUl().get(0);
         Assert.assertEquals("1087746829994", beneficialOwnerUl.getOgrn());
         Assert.assertEquals("7710723134", beneficialOwnerUl.getInn());
-        Assert.assertEquals("Федеральное агентство по управлению государственным имуществом", beneficialOwnerUl.getFullname());
+        Assert.assertEquals("Федеральное агентство по управлению государственным имуществом", beneficialOwnerUl.getFullName());
         Assert.assertEquals(0, Double.compare(38.373455405235300, beneficialOwnerUl.getShare()));
         Assert.assertTrue(beneficialOwnerUl.isIsAccurate());
 
         // Check beneficial owner foreign
         BeneficialOwnerForeign beneficialOwnerForeign = beneficialOwnerResponse.getBeneficialOwners().getBeneficialOwnersForeign().get(0);
-        Assert.assertEquals("Вудико Холдинг Лимитед (Woodiko Holding Ltd)", beneficialOwnerForeign.getFullname());
+        Assert.assertEquals("Вудико Холдинг Лимитед (Woodiko Holding Ltd)", beneficialOwnerForeign.getFullName());
         Assert.assertEquals("Кипр", beneficialOwnerForeign.getCountry());
         Assert.assertEquals(0, Double.compare(0.037967871294025300, beneficialOwnerForeign.getShare()));
         Assert.assertTrue(beneficialOwnerForeign.isIsAccurate());
 
         BeneficialOwnerOther beneficialOwnerOther = beneficialOwnerResponse.getBeneficialOwners().getBeneficialOwnersOther().get(0);
-        Assert.assertEquals("АО «Газпром газораспределение»", beneficialOwnerOther.getFullname());
+        Assert.assertEquals("АО «Газпром газораспределение»", beneficialOwnerOther.getFullName());
         Assert.assertEquals(0, Double.compare(0.89197726920247100, beneficialOwnerOther.getShare()));
         Assert.assertTrue(beneficialOwnerOther.isIsAccurate());
     }

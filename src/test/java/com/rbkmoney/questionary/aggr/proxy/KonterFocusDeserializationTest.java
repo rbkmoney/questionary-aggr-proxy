@@ -5,12 +5,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.rbkmoney.questionary.aggr.proxy.serialize.kontur.*;
-import com.rbkmoney.questionary_proxy_aggr.base_kontur_focus.Branch;
-import com.rbkmoney.questionary_proxy_aggr.base_kontur_focus.LegalAddress;
-import com.rbkmoney.questionary_proxy_aggr.base_kontur_focus.LegalName;
-import com.rbkmoney.questionary_proxy_aggr.kontur_focus_egr_details.EgrDetailsIndividualEntity;
-import com.rbkmoney.questionary_proxy_aggr.kontur_focus_egr_details.EgrDetailsResponse;
-import com.rbkmoney.questionary_proxy_aggr.kontur_focus_egr_details.EgrRecord;
+import com.rbkmoney.questionary_proxy_aggr.base_kontur_focus.*;
+import com.rbkmoney.questionary_proxy_aggr.kontur_focus_beneficial_owner.*;
+import com.rbkmoney.questionary_proxy_aggr.kontur_focus_egr_details.*;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_licences.LicencesResponse;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_licences.License;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_req.LegalEntityStatusDetail;
@@ -90,6 +87,23 @@ public class KonterFocusDeserializationTest {
     }
 
     @Test
+    public void kfReqLegalDeserializerTest() throws IOException {
+        final SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addDeserializer(LegalEntityStatusDetail.class, new KonturLegalStatusDetailDeserializer());
+        simpleModule.addDeserializer(Branch.class, new KonturBranchDeserializer());
+        simpleModule.addDeserializer(LegalAddress.class, new KonturLegalAddressDeserializer());
+        simpleModule.addDeserializer(LegalName.class, new KonturLegalNameDeserializer());
+        simpleModule.addDeserializer(PrivateEntityStatusDetail.class, new KonturIPStatusDeserializer());
+        simpleModule.addDeserializer(ReqResponse.class, new KonturReqResponseDeserializer());
+        simpleModule.addDeserializer(ReqIndividualEntity.class, new KonturReqIPDeserializer());
+        objectMapper.registerModule(simpleModule);
+        final List<ReqResponse> regResponseList = objectMapper.readValue(TestResponse.kfReqLegalResp(),
+                new TypeReference<List<ReqResponse>>() {
+                });
+        Assert.assertEquals(2, regResponseList.size());
+    }
+
+    @Test
     public void kfEgrDetailsDeserializerTest() throws IOException {
         final SimpleModule simpleModule = new SimpleModule();
         simpleModule.addDeserializer(EgrDetailsResponse.class, new KonturEgrDetailsResponseDeserializer());
@@ -123,6 +137,120 @@ public class KonterFocusDeserializationTest {
         Assert.assertEquals("Представление сведений об учете в налоговом органе", egrRecord.getName());
         Assert.assertEquals("Межрайонная Инспекция Федеральной Налоговой Службы № 10 по Оренбургской Области", egrRecord.getRegName());
         Assert.assertEquals("5658", egrRecord.getRegCode());
+    }
+
+    @Test
+    public void kfEgrDetailsLegalDeserializerTest() throws IOException {
+        final SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addDeserializer(EgrDetailsResponse.class, new KonturEgrDetailsResponseDeserializer());
+        simpleModule.addDeserializer(ShareHolders.class, new KonturShareHoldersDeserializer());
+        simpleModule.addDeserializer(EgrDetailsLegalEntity.class, new KonturEgrDetailsLegalEntityDeserializer());
+        simpleModule.addDeserializer(EgrDetailsHistory.class, new KonturEgrDetailsHistoryDeserializer());
+        simpleModule.addDeserializer(BeneficialOwnerUl.class, new KonturBeneficialOwnerUlDeserializer());
+        simpleModule.addDeserializer(BeneficialOwnerForeign.class, new KonturBeneficialOwnerForeignDeserializer());
+        simpleModule.addDeserializer(BeneficialOwnerOther.class, new KonturBeneficialOwnerOtherDeserializer());
+        objectMapper.registerModule(simpleModule);
+        final List<EgrDetailsResponse> egrDetailsReponseList = objectMapper.readValue(TestResponse.kfEgrDetailsLegal(),
+                new TypeReference<List<EgrDetailsResponse>>() {
+                });
+        Assert.assertEquals(2, egrDetailsReponseList.size());
+        EgrDetailsResponse egrDetailsResponse = egrDetailsReponseList.get(0);
+        EgrDetailsLegalEntity legalEntity = egrDetailsResponse.getContractor().getLegalEntity();
+
+        // Check principal activities
+        Assert.assertEquals("46.71", legalEntity.getActivities().getPrincipalActivity().getCode());
+        Assert.assertEquals("Торговля оптовая твердым, жидким и газообразным топливом и подобными продуктами",
+                legalEntity.getActivities().getPrincipalActivity().getText());
+        Assert.assertEquals("2012-04-13", legalEntity.getActivities().getPrincipalActivity().getDate());
+
+        // Check complementary activity
+        ComplementaryActivity complementaryActivity = legalEntity.getActivities().getComplementaryActivities().get(0);
+        Assert.assertEquals("06.10", complementaryActivity.getCode());
+        Assert.assertEquals("Добыча сырой нефти и нефтяного (попутного) газа", complementaryActivity.getText());
+        Assert.assertEquals("2012-04-13", complementaryActivity.getDate());
+
+        // Check reg info
+        RegInfo regInfo = legalEntity.getRegInfo();
+        Assert.assertEquals("Государственное учреждение Московская регистрационная палата", legalEntity.getRegInfo().getRegName());
+        Assert.assertEquals("2002-08-02", legalEntity.getRegInfo().getOgrnDate());
+
+        // Check nalog registration
+        Assert.assertEquals("7728", legalEntity.getNalogRegBody().getNalogCode());
+        Assert.assertEquals("Инспекция Федеральной налоговой службы № 28 по г.Москве", legalEntity.getNalogRegBody().getNalogName());
+        Assert.assertEquals("1996-02-19", legalEntity.getNalogRegBody().getNalogRegDate());
+        Assert.assertEquals("772801001", legalEntity.getNalogRegBody().getKpp());
+        Assert.assertEquals("2013-09-04", legalEntity.getNalogRegBody().getDate());
+
+        // Check registration
+        Assert.assertEquals("7746", legalEntity.getRegBody().getNalogCode());
+        Assert.assertEquals("Межрайонная инспекция Федеральной налоговой службы № 46 по г. Москве", legalEntity.getRegBody().getNalogName());
+        Assert.assertEquals("2008-01-01", legalEntity.getRegBody().getDate());
+
+        // Check shareholdes
+        Assert.assertEquals("2019-09-30", legalEntity.getShareholders().getDate());
+        ShareHolderFl shareholderFl = legalEntity.getShareholders().getShareholdersFl().get(0);
+        Assert.assertEquals("2019-09-30", shareholderFl.getDate());
+        Assert.assertEquals("Штепа Сергей Вячеславович", shareholderFl.getFio());
+        Assert.assertEquals(0, Double.compare(0.0067586, shareholderFl.getVotingSharesPercent()));
+        Assert.assertEquals(0, Double.compare(0.0067586, shareholderFl.getCapitalSharesPercent()));
+
+        Assert.assertEquals(9, legalEntity.getShareholders().getShareholdersUlSize());
+        Assert.assertEquals(3, legalEntity.getShareholders().getShareholdersOtherSize());
+
+        // Check stated capital
+        Assert.assertEquals(118367564500L, legalEntity.getStatedCapital().getSum());
+        Assert.assertEquals("2004-12-03", legalEntity.getStatedCapital().getDate());
+
+        // Check egr record
+        EgrRecord egrRecord = legalEntity.getEgrRecords().get(0);
+        Assert.assertEquals("8197748492208", egrRecord.getGrn());
+        Assert.assertEquals("2019-10-31", egrRecord.getDate());
+        Assert.assertEquals("Изменение сведений о ЮЛ, содержащихся в ЕГРЮЛ", egrRecord.getName());
+        Assert.assertEquals("Межрайонная Инспекция Федеральной Налоговой Службы № 46 по г. Москве", egrRecord.getRegName());
+        Assert.assertEquals("7746", egrRecord.getRegCode());
+        Assert.assertEquals("Р14001 заявление об изм.сведений, не связанных с изм. учред.документов (п.2.1)", egrRecord.getDocuments().get(0).getName());
+        Assert.assertEquals("Доверенность роман в б", egrRecord.getDocuments().get(1).getName());
+    }
+
+    @Test
+    public void kfBeneficialOwnersDeserializerTest() throws IOException {
+        final SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addDeserializer(BeneficialOwners.class, new KonturBeneficialOwnersDeserializer());
+        simpleModule.addDeserializer(BeneficialOwnerUl.class, new KonturBeneficialOwnerUlDeserializer());
+        simpleModule.addDeserializer(BeneficialOwnerForeign.class, new KonturBeneficialOwnerForeignDeserializer());
+        simpleModule.addDeserializer(BeneficialOwnerOther.class, new KonturBeneficialOwnerOtherDeserializer());
+        objectMapper.registerModule(simpleModule);
+        final List<BeneficialOwnerResponse> beneficialOwnerResponseList = objectMapper.readValue(TestResponse.kfBeneficialOwnerResp(),
+                new TypeReference<List<BeneficialOwnerResponse>>() {
+                });
+        Assert.assertEquals(2, beneficialOwnerResponseList.size());
+        BeneficialOwnerResponse beneficialOwnerResponse = beneficialOwnerResponseList.get(0);
+
+        // Check beneficial owner FL
+        BeneficialOwnerFl beneficialOwnerFl = beneficialOwnerResponse.getBeneficialOwners().getBeneficialOwnersFl().get(0);
+        Assert.assertEquals("Штепа Сергей Вячеславович", beneficialOwnerFl.getFio());
+        Assert.assertEquals(0, Double.compare(0.0067585999204311500, beneficialOwnerFl.getShare()));
+        Assert.assertTrue(beneficialOwnerFl.isIsAccurate());
+
+        // Check beneficial owner UL
+        BeneficialOwnerUl beneficialOwnerUl = beneficialOwnerResponse.getBeneficialOwners().getBeneficialOwnersUl().get(0);
+        Assert.assertEquals("1087746829994", beneficialOwnerUl.getOgrn());
+        Assert.assertEquals("7710723134", beneficialOwnerUl.getInn());
+        Assert.assertEquals("Федеральное агентство по управлению государственным имуществом", beneficialOwnerUl.getFullname());
+        Assert.assertEquals(0, Double.compare(38.373455405235300, beneficialOwnerUl.getShare()));
+        Assert.assertTrue(beneficialOwnerUl.isIsAccurate());
+
+        // Check beneficial owner foreign
+        BeneficialOwnerForeign beneficialOwnerForeign = beneficialOwnerResponse.getBeneficialOwners().getBeneficialOwnersForeign().get(0);
+        Assert.assertEquals("Вудико Холдинг Лимитед (Woodiko Holding Ltd)", beneficialOwnerForeign.getFullname());
+        Assert.assertEquals("Кипр", beneficialOwnerForeign.getCountry());
+        Assert.assertEquals(0, Double.compare(0.037967871294025300, beneficialOwnerForeign.getShare()));
+        Assert.assertTrue(beneficialOwnerForeign.isIsAccurate());
+
+        BeneficialOwnerOther beneficialOwnerOther = beneficialOwnerResponse.getBeneficialOwners().getBeneficialOwnersOther().get(0);
+        Assert.assertEquals("АО «Газпром газораспределение»", beneficialOwnerOther.getFullname());
+        Assert.assertEquals(0, Double.compare(0.89197726920247100, beneficialOwnerOther.getShare()));
+        Assert.assertTrue(beneficialOwnerOther.isIsAccurate());
     }
 
 }

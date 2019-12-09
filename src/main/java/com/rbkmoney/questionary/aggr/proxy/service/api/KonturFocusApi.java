@@ -24,6 +24,8 @@ public class KonturFocusApi {
 
     private static final String LICENCES = "https://focus-api.kontur.ru/api3/licences?key={token}";
 
+    private static final String BENEFICIAL_OWNERS = "https://focus-api.kontur.ru/api3/beneficialOwners?key={token}";
+
     private final RestTemplate restTemplate;
 
     private final KonturFocusSettings konturFocusSettings;
@@ -47,6 +49,11 @@ public class KonturFocusApi {
 
     public ResponseEntity<String> egrDetailsRequest(List<String> ogrnList, List<String> innList) throws KonturFocusRequestException {
         final URI uri = buildUri(EGR_DETAILS, ogrnList, innList);
+        return sendRequest(uri, String.class);
+    }
+
+    public ResponseEntity<String> beneficialOwnerRequest(List<String> ogrnLIst, List<String> innList) throws KonturFocusRequestException {
+        final URI uri = buildUri(BENEFICIAL_OWNERS, ogrnLIst, innList);
         return sendRequest(uri, String.class);
     }
 

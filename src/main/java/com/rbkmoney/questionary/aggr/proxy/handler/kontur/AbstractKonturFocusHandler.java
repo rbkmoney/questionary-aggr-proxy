@@ -10,7 +10,14 @@ import com.rbkmoney.questionary_proxy_aggr.base_kontur_focus.LegalAddress;
 import com.rbkmoney.questionary_proxy_aggr.base_kontur_focus.LegalName;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_api.KonturFocusRequest;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_api.KonturFocusResponse;
+import com.rbkmoney.questionary_proxy_aggr.kontur_focus_beneficial_owner.BeneficialOwnerForeign;
+import com.rbkmoney.questionary_proxy_aggr.kontur_focus_beneficial_owner.BeneficialOwnerOther;
+import com.rbkmoney.questionary_proxy_aggr.kontur_focus_beneficial_owner.BeneficialOwnerUl;
+import com.rbkmoney.questionary_proxy_aggr.kontur_focus_beneficial_owner.BeneficialOwners;
+import com.rbkmoney.questionary_proxy_aggr.kontur_focus_egr_details.EgrDetailsHistory;
+import com.rbkmoney.questionary_proxy_aggr.kontur_focus_egr_details.EgrDetailsLegalEntity;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_egr_details.EgrDetailsResponse;
+import com.rbkmoney.questionary_proxy_aggr.kontur_focus_egr_details.ShareHolders;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_req.LegalEntityStatusDetail;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_req.PrivateEntityStatusDetail;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_req.ReqIndividualEntity;
@@ -32,6 +39,13 @@ public abstract class AbstractKonturFocusHandler implements KonturFocusRequestHa
         simpleModule.addDeserializer(PrivateEntityStatusDetail.class, new KonturIPStatusDeserializer());
         simpleModule.addDeserializer(ReqResponse.class, new KonturReqResponseDeserializer());
         simpleModule.addDeserializer(ReqIndividualEntity.class, new KonturReqIPDeserializer());
+        simpleModule.addDeserializer(ShareHolders.class, new KonturShareHoldersDeserializer());
+        simpleModule.addDeserializer(EgrDetailsLegalEntity.class, new KonturEgrDetailsLegalEntityDeserializer());
+        simpleModule.addDeserializer(EgrDetailsHistory.class, new KonturEgrDetailsHistoryDeserializer());
+        simpleModule.addDeserializer(BeneficialOwnerUl.class, new KonturBeneficialOwnerUlDeserializer());
+        simpleModule.addDeserializer(BeneficialOwnerForeign.class, new KonturBeneficialOwnerForeignDeserializer());
+        simpleModule.addDeserializer(BeneficialOwnerOther.class, new KonturBeneficialOwnerOtherDeserializer());
+        simpleModule.addDeserializer(BeneficialOwners.class, new KonturBeneficialOwnersDeserializer());
 
         // EgrDetails deserializer
         simpleModule.addDeserializer(EgrDetailsResponse.class, new KonturEgrDetailsResponseDeserializer());

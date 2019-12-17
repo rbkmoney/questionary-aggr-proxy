@@ -17,6 +17,7 @@ import com.rbkmoney.questionary_proxy_aggr.dadata_party.PartyQuery;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_api.KonturFocusEndPoint;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_api.KonturFocusRequest;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_api.KonturFocusResponse;
+import com.rbkmoney.questionary_proxy_aggr.kontur_focus_beneficial_owner.BeneficialOwnerQuery;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_egr_details.EgrDetailsQuery;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_licences.LicencesQuery;
 import com.rbkmoney.questionary_proxy_aggr.kontur_focus_req.ReqQuery;
@@ -24,8 +25,11 @@ import org.apache.thrift.TException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,6 +37,8 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
+@RunWith(SpringRunner.class)
 public class AggregatorProxyServiceTest {
 
     private static final List<String> OGRN_LIST = Collections.emptyList();
@@ -105,6 +111,20 @@ public class AggregatorProxyServiceTest {
         konturFocusRequest.setLicencesQuery(licencesQuery);
         final KonturFocusResponse konturFocusResponse = aggregatorProxyService.requestKonturFocus(konturFocusRequest, KonturFocusEndPoint.licences);
         verify(konturFocusApiMock, atLeastOnce()).licenseRequest(anyList(), anyList());
+        Assert.assertNotNull(konturFocusResponse);
+    }
+
+    @Test
+    public void konturFocusBeneficialOwnerTest() throws TException {
+        final ResponseEntity<String> responseEntity = new ResponseEntity<>(TestResponse.kfLicenseResp(), HttpStatus.OK);
+        when(konturFocusApiMock.beneficialOwnerRequest(anyList(), anyList())).thenReturn(responseEntity);
+        final KonturFocusRequest konturFocusRequest = new KonturFocusRequest();
+        BeneficialOwnerQuery beneficialOwnerQuery = new BeneficialOwnerQuery();
+        beneficialOwnerQuery.setInn(INN_LIST);
+        beneficialOwnerQuery.setOgrn(OGRN_LIST);
+        konturFocusRequest.setBeneficialOwnerQuery(beneficialOwnerQuery);
+        KonturFocusResponse konturFocusResponse = aggregatorProxyService.requestKonturFocus(konturFocusRequest, KonturFocusEndPoint.beneficial_owners);
+        verify(konturFocusApiMock, atLeastOnce()).beneficialOwnerRequest(anyList(), anyList());
         Assert.assertNotNull(konturFocusResponse);
     }
 

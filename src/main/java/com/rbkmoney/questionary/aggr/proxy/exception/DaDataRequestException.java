@@ -16,8 +16,4 @@ public class DaDataRequestException extends RuntimeException {
     public DaDataRequestException(Throwable cause) {
         super(cause);
     }
-
-    public DaDataRequestException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 }

@@ -31,7 +31,7 @@ public class QuestionaryAggrProxyHandler implements QuestionaryAggrProxyHandlerS
             return aggregatorProxyService.requestKonturFocus(request, endPoint);
         } catch (KonturFocusRequestException ex) {
             log.warn("Request exception", ex);
-            throw new KonturFocusInvalidRequest();
+            throw new KonturFocusInvalidRequest(ex.getMessage());
         } catch (NotFoundException ex) {
             log.warn("Not found", ex);
             throw new KonturFocusNotFound();
@@ -48,7 +48,7 @@ public class QuestionaryAggrProxyHandler implements QuestionaryAggrProxyHandlerS
             return aggregatorProxyService.requestDaData(request, endPoint);
         } catch (DaDataRequestException ex) {
             log.warn("Request exception", ex);
-            throw new DaDataInvalidRequest();
+            throw new DaDataInvalidRequest(ex.getMessage());
         } catch (NotFoundException ex) {
             log.warn("Not found", ex);
             throw new DaDataNotFound();

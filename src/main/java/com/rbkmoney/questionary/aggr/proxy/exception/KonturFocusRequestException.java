@@ -16,8 +16,4 @@ public class KonturFocusRequestException extends RuntimeException {
     public KonturFocusRequestException(Throwable cause) {
         super(cause);
     }
-
-    public KonturFocusRequestException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 }
